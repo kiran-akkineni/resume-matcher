@@ -36,8 +36,8 @@ if __name__ == "__main__":
         
         similarities = compute_similarity(job_description, resumes)
         
-        for i, score in similarities:
-            print(f"Resume: {filenames[i]}, Similarity Score: {score}")
+        for rank, (i, score) in enumerate(similarities, start=1):
+            print(f"Resume {rank}: {filenames[i]}, Similarity Score: {score:.4f}")
     except Exception as e:
         print(f"An error occurred: {e}")
         sys.exit(1)

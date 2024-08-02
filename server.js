@@ -20,7 +20,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const app = express();
-const port = 3000;
+const port = 3001;
+
+// Set EJS as the templating engine
+app.set('view engine', 'ejs');
 
 // Middleware to parse JSON and form data
 app.use(bodyParser.json());
@@ -28,6 +31,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Route to render the upload form
+app.get('/', (req, res) => {
+    res.render('index');
+});
 
 // Route to handle form submission
 app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'resumeFiles' }]), async (req, res) => {
@@ -59,7 +67,7 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
 
         // Run the similarity script
         const similarities = await runPythonScript(jobDescFile, resumesFile, filenamesFile);
-        res.send(similarities);
+        res.render('results', { similarities });
     } catch (error) {
         console.error(error);
         res.status(500).send(error.toString());
