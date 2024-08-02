@@ -1,0 +1,15 @@
+{
+  "name": "resume-matcher",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "electron": "^13.1.7",
+    "express": "^4.17.1",
+    "pdf-parse": "^1.1.1",
+    "mammoth": "^1.4.2"
+  }
+}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Matcher</title>
+</head>
+<body>
+    <h1>Resume Matcher</h1>
+    <form action="/submit" method="post" enctype="multipart/form-data">
+        <label for="jobDescriptionFiles">Job Description Files:</label>
+        <input type="file" id="jobDescriptionFiles" name="jobDescriptionFiles" accept=".pdf,.txt,.docx" required multiple><br><br>
+        <label for="resumeFiles">Resume Files:</label>
+        <input type="file" id="resumeFiles" name="resumeFiles" accept=".pdf,.txt,.docx" required multiple><br><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
