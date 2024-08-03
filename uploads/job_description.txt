@@ -1,34 +1,156 @@
-JOB OVERVIEW
-We seek an enthusiastic, diligent, and talented Senior Backend Service Engineer to join the Callaway eCommerce engineering team. To be part of this team, you need to have an abundance of intellectual curiosity, be an initiative-taking achiever, and be excited to collaborate with a team focused on innovation and delivering solutions that raise the bar. You will actively design, code, and guide engineering projects to support our eCommerce platform by leveraging Salesforce Commerce Cloud, JavaScript (ECMA Script 6+/2022), SnapLogic, and more. This is a fast-paced Agile environment, with plenty of opportunities to gain experience and fail fast. In supporting this position, you’ll share your knowledge with a broader team of experienced backend and frontend engineers as we migrate from our J2EE-based platform to Salesforce Commerce Cloud and Next.js.
+ Austin Gray
 
-Our vision is to build a world-class e-commerce platform for TopGolf/Callaway brands to continue to ensure the first-class experience our customers have come to enjoy.
+austingray736@gmail.com • San Marcos, CA, 92069, US • 760 809 6444
 
-ROLES AND RESPONSIBILITIES
-The effectiveness and value of the systems we build are influenced and controlled by the services we make. The ideal candidate is a talented and experienced software engineer with expertise in agile teams that utilize Salesforce Commerce Cloud (or other server-side JavaScript runtimes such as Node.js), microservice design principles, and middleware to deliver outstanding customer experiences. You should have a solid software engineering fundamentals background and a deep understanding of best practices in various languages/technologies. You should love creating things and take great personal pride in building engaging and innovative interfaces.
 
-REQUIRED TECHNICAL COMPETENCIES (Knowledge, Skills & Abilities)
-	•	Strong Computer Science/Engineering fundamentals
-	•	5+ years of server-side JavaScript-based engineering experience
-	•	3+ years developing in an Agile environment.
-	•	3+ years of developing using relational and/or NoSQL databases.
-	•	3+ years developing API-first services (REST and/or GraphQL)
-	•	Experience developing with modern build systems (npm, YARN, etc.) and modern IDEs (IntelliJ, VS Code)
-	•	Experience with branch-based development using modern version control (GitHub, GitLab, Bitbucket)
-	•	Experience development using best practices (unit/contract testing, secrets handling, etc.)
-	•	Ability to work independently or as part of a team.
-	•	Excellent communication and problem-solving skills.
 
-PREFERRED SKILLS
-	•	Experience with Salesforce Commerce Cloud (formerly Demandware), including cartridge development and SDLC using on-demand sandboxes (administrative knowledge a plus)
-	•	Experience working with server-side Next.js (Vercel preferred)
-	•	Experience working with standalone CMS (Contentstack preferred)
-	•	Experience building integrations with SnapLogic or similar (Mulesoft, Apache NiFi, etc.)
-	•	Experience utilizing CI/CD pipelines.
-	•	Experience utilizing Azure Cloud IaaS.
-	•	Familiarity with core eCommerce concepts, including content management, inventory management, pricing, promotions, personalization, and complex product variant setup and configuration
-	•	Passion for learning and innovation.
+Software Engineer 
 
-EDUCATION AND EXPERIENCE
-	•	A bachelor’s degree in computer science, related degree, or equivalent work experience is required.
-	•	Minimum 5+ years of software development experience required, including working with an Agile development team (Scrum or Kanban).
-	•	Relevant professional certifications are a plus.
+
+
+
+
+
+
+Technology-savvy and quality-focused software engineer with nearly fifteen years of experience in software development. Adept at analyzing business needs, coordinating development teams, writing code, and implementing quality assurance measures. Proven ability to manage multiple projects simultaneously and effectively collaborate with cross-functional teams. Enthusiastic about improving development processes and delivering superior software solutions.
+
+Software Development
+
+Software Testing / Debugging 
+
+Software Quality Assurance 
+
+Project Planning & Execution 
+
+Communication & Collaboration
+
+Staff Coordination & Support 
+
+
+
+Career Experience
+
+
+
+
+
+
+
+Backend Developer, Gamigo, Inc. (Game Publishing), Remote	May 2021 to June 2024
+
+Updated and maintained several backend systems, including REST APIs running on Node.js.
+
+Migrated 100+ microservices from bitbucket/bamboo to gitlab, including transcribing their individual CI/CDs to integrate with the new deployment pipelines.
+
+Deployed new EC2 and Lambda services on AWS using CloudFormation; Created security policies to ensure safekeeping of sensitive information while creating appropriate connections between VPCs.
+
+Responsible for creating unit tests with appropriate code coverage as well as end to end integration tests to validate actions through program flow.
+
+Refreshed a user acquisition funnel by removing unnecessary requirements of user input and decreasing calls to backend servers reducing time users spent waiting thereby increasing new user sign-ups by 20%.
+
+Contributed to roadmap planning by providing expertise on current systems’ architectures.
+
+Conducted code reviews, database maintenance, interviewing, training, and documentation.
+
+Built relationships with external software vendors for better synergy with internal services.
+
+Operations Manager, GTR Enterprises, Inc. (CNC Manufacturing), Carlsbad, CA	2018 to 2021
+
+Along with my new role as Operations Manager I was still charged with my previous responsibilities as a Software Developer.
+
+Oversaw day-to-day operations, including shop scheduling, resolving manufacturing quality issues, preventive maintenance of equipment, and employee training.
+
+Collaborated with finance and customer departments to meet customers’ needs within budget constraints.
+
+Worked directly with customers’ engineers to both resolve quality issues with delivered parts and to optimize part design/constraints to better meet their product needs.
+
+Software Developer, GTR Enterprises, Inc., Carlsbad, CA	2010 to 2018
+
+Developed a complete MRP system for manufacturing and business management.
+
+Backend RESTful API built on PHP using F3 framework with MySQL.
+
+Frontend SPA built on AngularJS.
+
+Modules that were built: Inventory Control, Job Scheduling and Tracking, Quoting, Purchasing, QA (collection of measurement data), integration with finance software, and more.
+
+Designed a mobile app for user-friendly hardware interaction on the factory floor.
+
+Prepared Excel Macros for statistical visual analysis of sample population spread.
+
+
+
+Education
+
+
+
+
+
+
+
+B.S. in Applied Physics | California State University San Marcos, San Marcos, CA
+
+	
+
+Technical Skills
+
+
+
+
+
+
+
+Program/Cloud Competencies
+
+Languages
+
+AWS
+
+Git
+
+Gitlab
+
+Bitbucket/Bamboo/Jira
+
+npm/Yarn
+
+VS Code
+
+IntelliJ
+
+Docker
+
+TypeScript (React, Express, Next)
+
+JavaScript (Node.js, ES6)
+
+SQL (MySQL, Postgres, SQLite)
+
+PHP
+
+C#
+
+HTML5
+
+CSS3
+
+Python
+
+VB/VBA
+
+Java
+
+Scala
+
+Rust
+
+Development Methodologies
+
+Kanban (Agile)
+
+DevOps
+
+Waterfall
+
+
+

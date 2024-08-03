@@ -34,11 +34,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 let uploadedResumes = [];
 let jobDescriptionText = '';
+let jobDescriptionFilename = '';
 let resumeScores = [];
 
 // Route to render the upload form
 app.get('/', (req, res) => {
-    res.render('index', { resumes: resumeScores, jobDescription: jobDescriptionText });
+    res.render('index', { resumes: resumeScores, jobDescription: jobDescriptionText, jobDescriptionFilename });
 });
 
 // Route to handle form submission
@@ -52,11 +53,13 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
         // Process job description
         if (jobDescriptionFiles && jobDescriptionFiles.length > 0) {
             const newJobDescription = await extractText(jobDescriptionFiles[0].path);
+            jobDescriptionFilename = jobDescriptionFiles[0].originalname;
             if (replaceJobDescription) {
                 jobDescriptionText = newJobDescription;
             } else {
                 jobDescriptionText += '\n' + newJobDescription;
             }
+            console.log('Job Description:', jobDescriptionText);
         }
 
         // If replaceResumes is checked, clear the uploadedResumes array
@@ -70,6 +73,7 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
             const resumes = await Promise.all(resumeFiles.map(async file => {
                 try {
                     const text = await extractText(file.path);
+                    console.log('Resume Text:', text);
                     return { name: file.originalname, text: text.trim() ? text : null };
                 } catch (error) {
                     console.error(`Error processing file ${file.originalname}: ${error.message}`);
@@ -90,15 +94,23 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
 
             // Run the similarity script
             const similarities = await runPythonScript(jobDescFile, resumesFile, filenamesFile);
-            resumeScores = similarities.split('\n').map((line, index) => {
-                const parts = line.split(', Similarity Score: ');
-                return { name: uploadedResumes[index]?.name, score: parseFloat(parts[1]) };
-            }).filter(resume => resume.name); // Filter out any undefined entries
+            console.log('Raw Similarities Output:', similarities); // Log the raw output from Python script
 
-            res.render('index', { resumes: resumeScores, jobDescription: jobDescriptionText });
-        } else {
-            res.render('index', { resumes: resumeScores, jobDescription: jobDescriptionText });
+            const similarityLines = similarities.split('\n').filter(line => line.includes('Similarity Score'));
+
+            resumeScores = similarityLines.map(line => {
+                console.log('Parsing line:', line); // Log each line being parsed
+                const parts = line.split(', Similarity Score: ');
+                const name = parts[0].split(': ')[1];
+                const score = parseFloat(parts[1]);
+                console.log(`Parsed score for resume ${name}: ${score}`);
+                return { name, score: isNaN(score) ? 0 : score };
+            });
+
+            console.log('Resume Scores:', resumeScores);
         }
+
+        res.redirect('/');
     } catch (error) {
         console.error(error);
         res.status(500).send(error.toString());

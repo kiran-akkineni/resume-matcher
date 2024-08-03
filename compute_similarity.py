@@ -5,10 +5,12 @@ nlp = spacy.load('en_core_web_md')
 
 def compute_similarity(job_description, resumes):
     job_desc_doc = nlp(job_description)
+    print("Job Description Vector Norm:", job_desc_doc.vector_norm)
     similarities = []
 
     for i, resume in enumerate(resumes):
         resume_doc = nlp(resume)
+        print(f"Resume {i} Vector Norm:", resume_doc.vector_norm)
         if resume_doc.vector_norm:  # Check if the vector is not empty
             similarity = job_desc_doc.similarity(resume_doc)
         else:
