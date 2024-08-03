@@ -32,9 +32,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+let uploadedResumes = [];
+let jobDescriptionText = '';
+let resumeScores = [];
+
 // Route to render the upload form
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('index', { resumes: resumeScores, jobDescription: jobDescriptionText });
 });
 
 // Route to handle form submission
@@ -42,32 +46,59 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
     try {
         const jobDescriptionFiles = req.files.jobDescriptionFiles;
         const resumeFiles = req.files.resumeFiles;
+        const replaceJobDescription = req.body.replaceJobDescription === 'on';
+        const replaceResumes = req.body.replaceResumes === 'on';
 
-        // Ensure files are uploaded
-        if (!jobDescriptionFiles || !resumeFiles) {
-            return res.status(400).send('Please upload both job description and resume files.');
+        // Process job description
+        if (jobDescriptionFiles && jobDescriptionFiles.length > 0) {
+            const newJobDescription = await extractText(jobDescriptionFiles[0].path);
+            if (replaceJobDescription) {
+                jobDescriptionText = newJobDescription;
+            } else {
+                jobDescriptionText += '\n' + newJobDescription;
+            }
         }
 
-        // Process job description and resumes
-        const jobDescription = await extractText(jobDescriptionFiles[0].path);
-        const resumes = await Promise.all(resumeFiles.map(async file => {
-            const text = await extractText(file.path);
-            return { name: file.originalname, text: text.trim() ? text : null };
-        }));
+        // If replaceResumes is checked, clear the uploadedResumes array
+        if (replaceResumes) {
+            uploadedResumes = [];
+            resumeScores = [];
+        }
 
-        const filteredResumes = resumes.filter(resume => resume.text !== null);
+        // Process resumes and add to the uploadedResumes array
+        if (resumeFiles) {
+            const resumes = await Promise.all(resumeFiles.map(async file => {
+                try {
+                    const text = await extractText(file.path);
+                    return { name: file.originalname, text: text.trim() ? text : null };
+                } catch (error) {
+                    console.error(`Error processing file ${file.originalname}: ${error.message}`);
+                    return null;
+                }
+            }));
 
-        // Save the job description and resumes to temporary files
-        const jobDescFile = path.join(__dirname, 'uploads', 'job_description.txt');
-        const resumesFile = path.join(__dirname, 'uploads', 'resumes.txt');
-        const filenamesFile = path.join(__dirname, 'uploads', 'filenames.txt');
-        fs.writeFileSync(jobDescFile, jobDescription);
-        fs.writeFileSync(resumesFile, filteredResumes.map(resume => resume.text).join('\0')); // Use null character as delimiter
-        fs.writeFileSync(filenamesFile, filteredResumes.map(resume => resume.name).join('\n'));
+            const filteredResumes = resumes.filter(resume => resume && resume.text !== null);
+            uploadedResumes.push(...filteredResumes);
 
-        // Run the similarity script
-        const similarities = await runPythonScript(jobDescFile, resumesFile, filenamesFile);
-        res.render('results', { similarities });
+            // Save the job description and resumes to temporary files
+            const jobDescFile = path.join(__dirname, 'uploads', 'job_description.txt');
+            const resumesFile = path.join(__dirname, 'uploads', 'resumes.txt');
+            const filenamesFile = path.join(__dirname, 'uploads', 'filenames.txt');
+            fs.writeFileSync(jobDescFile, jobDescriptionText);
+            fs.writeFileSync(resumesFile, filteredResumes.map(resume => resume.text).join('\0')); // Use null character as delimiter
+            fs.writeFileSync(filenamesFile, uploadedResumes.filter(resume => resume).map(resume => resume.name).join('\n'));
+
+            // Run the similarity script
+            const similarities = await runPythonScript(jobDescFile, resumesFile, filenamesFile);
+            resumeScores = similarities.split('\n').map((line, index) => {
+                const parts = line.split(', Similarity Score: ');
+                return { name: uploadedResumes[index]?.name, score: parseFloat(parts[1]) };
+            }).filter(resume => resume.name); // Filter out any undefined entries
+
+            res.render('index', { resumes: resumeScores, jobDescription: jobDescriptionText });
+        } else {
+            res.render('index', { resumes: resumeScores, jobDescription: jobDescriptionText });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).send(error.toString());
@@ -83,17 +114,21 @@ app.listen(port, () => {
 async function extractText(filePath) {
     const ext = path.extname(filePath).toLowerCase();
     console.log(`Extracting text from file: ${filePath} with extension: ${ext}`);
-    if (ext === '.pdf') {
-        const dataBuffer = fs.readFileSync(filePath);
-        const pdfData = await pdfParse(dataBuffer);
-        return pdfData.text;
-    } else if (ext === '.txt') {
-        return fs.readFileSync(filePath, 'utf8');
-    } else if (ext === '.docx') {
-        const { value: text } = await mammoth.extractRawText({ path: filePath });
-        return text;
-    } else {
-        throw new Error('Unsupported file format: ' + ext);
+    try {
+        if (ext === '.pdf') {
+            const dataBuffer = fs.readFileSync(filePath);
+            const pdfData = await pdfParse(dataBuffer);
+            return pdfData.text;
+        } else if (ext === '.txt') {
+            return fs.readFileSync(filePath, 'utf8');
+        } else if (ext === '.docx') {
+            const { value: text } = await mammoth.extractRawText({ path: filePath });
+            return text;
+        } else {
+            throw new Error('Unsupported file format: ' + ext);
+        }
+    } catch (error) {
+        throw new Error(`Failed to extract text from file ${filePath}: ${error.message}`);
     }
 }
 

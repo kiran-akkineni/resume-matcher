@@ -17,13 +17,17 @@ form {
 }
 
 label {
-    display: block;
+    display: inline-block;
     margin-bottom: 10px;
 }
 
 input[type="file"] {
     display: block;
     margin-bottom: 20px;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
 }
 
 button {
@@ -44,4 +48,19 @@ pre {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    background: #fff;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+ul li:nth-child(odd) {
+    background: #f9f9f9;
 }

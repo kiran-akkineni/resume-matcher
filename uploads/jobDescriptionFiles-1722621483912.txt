@@ -1,0 +1,34 @@
+JOB OVERVIEW
+We seek an enthusiastic, diligent, and talented Senior Backend Service Engineer to join the Callaway eCommerce engineering team. To be part of this team, you need to have an abundance of intellectual curiosity, be an initiative-taking achiever, and be excited to collaborate with a team focused on innovation and delivering solutions that raise the bar. You will actively design, code, and guide engineering projects to support our eCommerce platform by leveraging Salesforce Commerce Cloud, JavaScript (ECMA Script 6+/2022), SnapLogic, and more. This is a fast-paced Agile environment, with plenty of opportunities to gain experience and fail fast. In supporting this position, you’ll share your knowledge with a broader team of experienced backend and frontend engineers as we migrate from our J2EE-based platform to Salesforce Commerce Cloud and Next.js.
+
+Our vision is to build a world-class e-commerce platform for TopGolf/Callaway brands to continue to ensure the first-class experience our customers have come to enjoy.
+
+ROLES AND RESPONSIBILITIES
+The effectiveness and value of the systems we build are influenced and controlled by the services we make. The ideal candidate is a talented and experienced software engineer with expertise in agile teams that utilize Salesforce Commerce Cloud (or other server-side JavaScript runtimes such as Node.js), microservice design principles, and middleware to deliver outstanding customer experiences. You should have a solid software engineering fundamentals background and a deep understanding of best practices in various languages/technologies. You should love creating things and take great personal pride in building engaging and innovative interfaces.
+
+REQUIRED TECHNICAL COMPETENCIES (Knowledge, Skills & Abilities)
+	•	Strong Computer Science/Engineering fundamentals
+	•	5+ years of server-side JavaScript-based engineering experience
+	•	3+ years developing in an Agile environment.
+	•	3+ years of developing using relational and/or NoSQL databases.
+	•	3+ years developing API-first services (REST and/or GraphQL)
+	•	Experience developing with modern build systems (npm, YARN, etc.) and modern IDEs (IntelliJ, VS Code)
+	•	Experience with branch-based development using modern version control (GitHub, GitLab, Bitbucket)
+	•	Experience development using best practices (unit/contract testing, secrets handling, etc.)
+	•	Ability to work independently or as part of a team.
+	•	Excellent communication and problem-solving skills.
+
+PREFERRED SKILLS
+	•	Experience with Salesforce Commerce Cloud (formerly Demandware), including cartridge development and SDLC using on-demand sandboxes (administrative knowledge a plus)
+	•	Experience working with server-side Next.js (Vercel preferred)
+	•	Experience working with standalone CMS (Contentstack preferred)
+	•	Experience building integrations with SnapLogic or similar (Mulesoft, Apache NiFi, etc.)
+	•	Experience utilizing CI/CD pipelines.
+	•	Experience utilizing Azure Cloud IaaS.
+	•	Familiarity with core eCommerce concepts, including content management, inventory management, pricing, promotions, personalization, and complex product variant setup and configuration
+	•	Passion for learning and innovation.
+
+EDUCATION AND EXPERIENCE
+	•	A bachelor’s degree in computer science, related degree, or equivalent work experience is required.
+	•	Minimum 5+ years of software development experience required, including working with an Agile development team (Scrum or Kanban).
+	•	Relevant professional certifications are a plus.

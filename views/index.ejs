@@ -10,10 +10,32 @@
     <h1>Resume Matcher</h1>
     <form action="/submit" method="post" enctype="multipart/form-data">
         <label for="jobDescriptionFiles">Job Description Files:</label>
-        <input type="file" id="jobDescriptionFiles" name="jobDescriptionFiles" accept=".pdf,.txt,.docx" required multiple><br><br>
+        <input type="file" id="jobDescriptionFiles" name="jobDescriptionFiles" accept=".pdf,.txt,.docx"><br><br>
+        
+        <input type="checkbox" id="replaceJobDescription" name="replaceJobDescription" checked>
+        <label for="replaceJobDescription">Replace previously selected job description</label><br><br>
+        
         <label for="resumeFiles">Resume Files:</label>
-        <input type="file" id="resumeFiles" name="resumeFiles" accept=".pdf,.txt,.docx" required multiple><br><br>
-        <button type="submit">Submit</button>
+        <input type="file" id="resumeFiles" name="resumeFiles" accept=".pdf,.txt,.docx" multiple><br><br>
+        
+        <input type="checkbox" id="replaceResumes" name="replaceResumes">
+        <label for="replaceResumes">Replace previously selected resumes</label><br><br>
+
+        <button type="submit">Upload</button>
     </form>
+    
+    <% if (jobDescription) { %>
+        <h2>Current Job Description</h2>
+        <pre><%= jobDescription %></pre>
+    <% } %>
+
+    <% if (resumes.length > 0) { %>
+        <h2>Resumes</h2>
+        <ul>
+            <% resumes.forEach((resume, index) => { %>
+                <li>Resume <%= index + 1 %>: <%= resume.name %> -- <%= resume.score %></li>
+            <% }) %>
+        </ul>
+    <% } %>
 </body>
 </html>
