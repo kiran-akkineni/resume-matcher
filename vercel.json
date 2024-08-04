@@ -4,9 +4,17 @@
       {
         "src": "server.js",
         "use": "@vercel/node"
+      },
+      {
+        "src": "api/compute_similarity.py",
+        "use": "@vercel/python"
       }
     ],
     "routes": [
+      {
+        "src": "/api/compute_similarity",
+        "dest": "/api/compute_similarity.py"
+      },
       {
         "src": "/(.*)",
         "dest": "/server.js"
