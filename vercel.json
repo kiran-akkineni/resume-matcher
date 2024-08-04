@@ -9,6 +9,7 @@
         "src": "api/compute_similarity.py",
         "use": "@vercel/python",
         "config": {
+          "runtime": "python3.12",
           "postInstall": "python post_install.py"
         }
       }
