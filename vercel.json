@@ -7,7 +7,10 @@
       },
       {
         "src": "api/compute_similarity.py",
-        "use": "@vercel/python"
+        "use": "@vercel/python",
+        "config": {
+          "postInstall": "python post_install.py"
+        }
       }
     ],
     "routes": [
