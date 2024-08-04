@@ -10,15 +10,7 @@ const PDFDocument = require('pdfkit');
 const blobStream = require('blob-stream');
 
 // Configure multer for file uploads, preserving original file extension
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        cb(null, `${file.fieldname}-${Date.now()}${ext}`);
-    }
-});
+const storage = multer.memoryStorage(); // Use memory storage for serverless environment
 const upload = multer({ storage: storage });
 
 const app = express();
@@ -54,7 +46,7 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
 
         // Process job description
         if (jobDescriptionFiles && jobDescriptionFiles.length > 0) {
-            const newJobDescription = await extractText(jobDescriptionFiles[0].path);
+            const newJobDescription = await extractText(jobDescriptionFiles[0]);
             jobDescriptionFilename = jobDescriptionFiles[0].originalname;
             if (replaceJobDescription) {
                 jobDescriptionText = newJobDescription;
@@ -74,7 +66,7 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
         if (resumeFiles) {
             const resumes = await Promise.all(resumeFiles.map(async file => {
                 try {
-                    const text = await extractText(file.path);
+                    const text = await extractText(file);
                     console.log('Resume Text:', text);
                     return { name: file.originalname, text: text.trim() ? text : null };
                 } catch (error) {
@@ -87,9 +79,9 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
             uploadedResumes.push(...filteredResumes);
 
             // Save the job description and resumes to temporary files
-            const jobDescFile = path.join(__dirname, 'uploads', 'job_description.txt');
-            const resumesFile = path.join(__dirname, 'uploads', 'resumes.txt');
-            const filenamesFile = path.join(__dirname, 'uploads', 'filenames.txt');
+            const jobDescFile = path.join('/tmp', 'job_description.txt');
+            const resumesFile = path.join('/tmp', 'resumes.txt');
+            const filenamesFile = path.join('/tmp', 'filenames.txt');
             fs.writeFileSync(jobDescFile, jobDescriptionText);
             fs.writeFileSync(resumesFile, filteredResumes.map(resume => resume.text).join('\0')); // Use null character as delimiter
             fs.writeFileSync(filenamesFile, uploadedResumes.filter(resume => resume).map(resume => resume.name).join('\n'));
@@ -148,24 +140,23 @@ app.listen(port, () => {
 });
 
 // Extract text from different file formats
-async function extractText(filePath) {
-    const ext = path.extname(filePath).toLowerCase();
-    console.log(`Extracting text from file: ${filePath} with extension: ${ext}`);
+async function extractText(file) {
+    const ext = path.extname(file.originalname).toLowerCase();
+    console.log(`Extracting text from file: ${file.originalname} with extension: ${ext}`);
     try {
         if (ext === '.pdf') {
-            const dataBuffer = fs.readFileSync(filePath);
-            const pdfData = await pdfParse(dataBuffer);
+            const pdfData = await pdfParse(file.buffer);
             return pdfData.text;
         } else if (ext === '.txt') {
-            return fs.readFileSync(filePath, 'utf8');
+            return file.buffer.toString('utf8');
         } else if (ext === '.docx') {
-            const { value: text } = await mammoth.extractRawText({ path: filePath });
+            const { value: text } = await mammoth.extractRawText({ buffer: file.buffer });
             return text;
         } else {
             throw new Error('Unsupported file format: ' + ext);
         }
     } catch (error) {
-        throw new Error(`Failed to extract text from file ${filePath}: ${error.message}`);
+        throw new Error(`Failed to extract text from file ${file.originalname}: ${error.message}`);
     }
 }
 
