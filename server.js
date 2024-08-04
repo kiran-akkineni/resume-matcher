@@ -6,6 +6,8 @@ const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
 const multer = require('multer');
 const { exec } = require('child_process');
+const PDFDocument = require('pdfkit');
+const blobStream = require('blob-stream');
 
 // Configure multer for file uploads, preserving original file extension
 const storage = multer.diskStorage({
@@ -20,7 +22,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
@@ -115,6 +117,29 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
         console.error(error);
         res.status(500).send(error.toString());
     }
+});
+
+// Route to serve the job description PDF
+app.get('/job-description.pdf', (req, res) => {
+    if (!jobDescriptionText) {
+        return res.status(404).send('No job description available');
+    }
+
+    const doc = new PDFDocument();
+    const stream = res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'inline; filename=job-description.pdf'
+    });
+
+    doc.on('data', (chunk) => stream.write(chunk));
+    doc.on('end', () => stream.end());
+
+    doc.fontSize(12).text(jobDescriptionText, {
+        align: 'justify',
+        width: 500
+    });
+
+    doc.end();
 });
 
 // Start the server
