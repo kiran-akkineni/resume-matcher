@@ -18,7 +18,8 @@ const port = process.env.PORT || 3001;
 
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'src', 'views')); // Updated path to the views directory
+app.set('views', path.join(__dirname, 'views'));
+
 
 // Middleware to parse JSON and form data
 app.use(bodyParser.json());
@@ -163,9 +164,8 @@ async function extractText(file) {
 
 // Run the Python script to compute similarities
 function runPythonScript(jobDescFile, resumesFile, filenamesFile) {
-    const scriptPath = path.join(__dirname, 'src', 'api', 'compute_similarity.py');
     return new Promise((resolve, reject) => {
-        exec(`python3 ${scriptPath} ${jobDescFile} ${resumesFile} ${filenamesFile}`, (error, stdout, stderr) => {
+        exec(`python3 compute_similarity.py ${jobDescFile} ${resumesFile} ${filenamesFile}`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`stderr: ${stderr}`);
                 console.log(`stdout: ${stdout}`);

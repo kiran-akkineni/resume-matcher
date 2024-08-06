@@ -1,28 +1,27 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "server.js",
-        "use": "@vercel/node"
-      },
-      {
-        "src": "api/compute_similarity.py",
-        "use": "@vercel/python",
-        "config": {
-          "runtime": "python3.12",
-          "postInstall": "python post_install.py"
-        }
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "src/api/compute_similarity.py",
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.12",
+        "postInstall": "python post_install.py"
       }
-    ],
-    "routes": [
-      {
-        "src": "/api/compute_similarity",
-        "dest": "/api/compute_similarity.py"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/server.js"
-      }
-    ]
-  }
-  
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/compute_similarity",
+      "dest": "/src/api/compute_similarity.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/server.js"
+    }
+  ]
+}
