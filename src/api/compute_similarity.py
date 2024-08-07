@@ -1,11 +1,15 @@
 from flask import Flask, request, jsonify
 import spacy
-from spacy.util import get_data_path
 
 app = Flask(__name__)
 
-model_path = get_data_path() / "en_core_web_md"
-nlp = spacy.load(model_path)
+# Ensure the model is loaded
+try:
+    nlp = spacy.load('en_core_web_md')
+except OSError:
+    import subprocess
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_md"])
+    nlp = spacy.load('en_core_web_md')
 
 def compute_similarity(job_description, resumes):
     job_desc_doc = nlp(job_description)
