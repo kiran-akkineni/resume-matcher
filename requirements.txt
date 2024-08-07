@@ -1,3 +1,2 @@
 Flask
 spacy
-en-core-web-md
