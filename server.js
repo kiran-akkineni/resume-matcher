@@ -151,10 +151,12 @@ async function extractText(file) {
 // Run the Python script to compute similarities via the API endpoint
 async function runPythonScript(jobDescription, resumes, filenames) {
     try {
-        const response = await axios.post('https://resume-matcher-two.vercel.app/api/compute_similarity', {
+        const response = await axios.post('http://127.0.0.1:5328/api/compute_similarity', {
             job_description: jobDescription,
             resumes: resumes,
             filenames: filenames
+        }, {
+            timeout: 60000 // Set timeout to 60 seconds
         });
         return response.data;
     } catch (error) {
