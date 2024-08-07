@@ -78,7 +78,6 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
 
             const filteredResumes = resumes.filter(resume => resume && resume.text !== null);
             uploadedResumes.push(...filteredResumes);
-            
 
             // Call the Python API
             const similarities = await runPythonScript(jobDescriptionText, filteredResumes.map(r => r.text), uploadedResumes.map(r => r.name));
@@ -151,7 +150,7 @@ async function extractText(file) {
 // Run the Python script to compute similarities via the API endpoint
 async function runPythonScript(jobDescription, resumes, filenames) {
     try {
-        const response = await axios.post('http://127.0.0.1:5328/api/compute_similarity', {
+        const response = await axios.post('https://resume-matcher-two.vercel.app/api/compute_similarity', {
             job_description: jobDescription,
             resumes: resumes,
             filenames: filenames
