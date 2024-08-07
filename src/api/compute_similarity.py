@@ -10,7 +10,7 @@ def compute_similarity(job_description, resumes):
 
     for i, resume in enumerate(resumes):
         resume_doc = nlp(resume)
-        if resume_doc.vector_norm:  # Check if the vector is not empty
+        if resume_doc.vector_norm:
             similarity = job_desc_doc.similarity(resume_doc)
         else:
             similarity = 0.0
@@ -32,4 +32,4 @@ def compute_similarity_endpoint():
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5328)

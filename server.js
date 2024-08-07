@@ -5,7 +5,7 @@ const fs = require('fs');
 const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
 const multer = require('multer');
-const { exec } = require('child_process');
+const axios = require('axios');
 const PDFDocument = require('pdfkit');
 const blobStream = require('blob-stream');
 
@@ -79,28 +79,14 @@ app.post('/submit', upload.fields([{ name: 'jobDescriptionFiles' }, { name: 'res
             const filteredResumes = resumes.filter(resume => resume && resume.text !== null);
             uploadedResumes.push(...filteredResumes);
 
-            // Save the job description and resumes to temporary files
-            const jobDescFile = path.join('/tmp', 'job_description.txt');
-            const resumesFile = path.join('/tmp', 'resumes.txt');
-            const filenamesFile = path.join('/tmp', 'filenames.txt');
-            fs.writeFileSync(jobDescFile, jobDescriptionText);
-            fs.writeFileSync(resumesFile, filteredResumes.map(resume => resume.text).join('\0')); // Use null character as delimiter
-            fs.writeFileSync(filenamesFile, uploadedResumes.filter(resume => resume).map(resume => resume.name).join('\n'));
+            // Call the Python API
+            const similarities = await runPythonScript(jobDescriptionText, filteredResumes.map(r => r.text), uploadedResumes.map(r => r.name));
+            console.log('Raw Similarities Output:', similarities);
 
-            // Run the similarity script
-            const similarities = await runPythonScript(jobDescFile, resumesFile, filenamesFile);
-            console.log('Raw Similarities Output:', similarities); // Log the raw output from Python script
-
-            const similarityLines = similarities.split('\n').filter(line => line.includes('Similarity Score'));
-
-            resumeScores = similarityLines.map(line => {
-                console.log('Parsing line:', line); // Log each line being parsed
-                const parts = line.split(', Similarity Score: ');
-                const name = parts[0].split(': ')[1];
-                const score = parseFloat(parts[1]);
-                console.log(`Parsed score for resume ${name}: ${score}`);
-                return { name, score: isNaN(score) ? 0 : score };
-            });
+            resumeScores = similarities.map((similarity, index) => ({
+                name: similarity.filename,
+                score: similarity.similarity
+            }));
 
             console.log('Resume Scores:', resumeScores);
         }
@@ -161,19 +147,17 @@ async function extractText(file) {
     }
 }
 
-// Run the Python script to compute similarities
-function runPythonScript(jobDescFile, resumesFile, filenamesFile) {
-    const scriptPath = path.join(__dirname, 'src', 'api', 'compute_similarity.py');
-    return new Promise((resolve, reject) => {
-        exec(`python3 ${scriptPath} ${jobDescFile} ${resumesFile} ${filenamesFile}`, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`stderr: ${stderr}`);
-                console.log(`stdout: ${stdout}`);
-                reject(error);
-            } else {
-                console.log(`stdout: ${stdout}`);
-                resolve(stdout.trim());
-            }
+// Run the Python script to compute similarities via the API endpoint
+async function runPythonScript(jobDescription, resumes, filenames) {
+    try {
+        const response = await axios.post('http://127.0.0.1:5328/api/compute_similarity', {
+            job_description: jobDescription,
+            resumes: resumes,
+            filenames: filenames
         });
-    });
+        return response.data;
+    } catch (error) {
+        console.error(`Error: ${error.response ? error.response.data : error.message}`);
+        throw error;
+    }
 }
