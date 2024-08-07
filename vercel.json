@@ -17,7 +17,13 @@
   "routes": [
     {
       "src": "/api/compute_similarity",
-      "dest": "/src/api/compute_similarity.py"
+      "dest": "/src/api/compute_similarity.py",
+      "headers": {
+        "x-vercel-id": "cle1::vfhmc-1723006034784-49d23f1b5a93",
+        "Host": "127.0.0.1:5328",
+        "Connection": "keep-alive"
+      },
+      "timeout": 30
     },
     {
       "src": "/(.*)",
